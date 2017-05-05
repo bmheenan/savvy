@@ -1,2 +1,4 @@
 node_modules
+ssl
 backend/jwt-secret.js
+npm-debug.log

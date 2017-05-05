@@ -180,6 +180,6 @@ describe("api/user-new", function() {
 				expect(responseTxt.reason).to.not.be.empty;
 				done();
 			});
-		}, 200);	// We perform this test after a small timeout, since strong consistency in Google Cloud datastore is not guaranteed
-	})
+		}, 100);	// We perform this test after a small timeout, since strong consistency in Google Cloud datastore is not guaranteed
+	});
 });

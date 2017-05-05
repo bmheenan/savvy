@@ -1,0 +1,76 @@
+<style type="text/css">
+	.login {
+		padding: 20px;
+		margin: 20px auto;
+		max-width: 430px;
+		background-color: #403C35;
+		border: 5px solid #6E675B;
+	}
+	.login .title h1 {
+		font-weight: normal;
+		font-size: 1.4rem;
+		margin:0;
+	}
+	.login .form {
+		padding-top: 15px;
+	}
+	.login .form .line {
+		margin-top: 10px;
+	}
+	.login .form .line .tag {
+		min-width: 100px;
+		display: inline-block;
+	}
+	.login .form .line input {
+		padding: 5px 10px;
+		border: 1px #fff solid;
+		color: #fff;
+		background-color: #2E2B26;
+		font-size: 1rem;
+		width: 230px;
+	}
+	.login .hintText {
+		font-size: .85rem;
+	}
+	.login .button {
+		width: 90px;
+		margin-left: 105px;
+	}
+	.login .responseArea .serverResponse {
+		margin: 20px 0 0 0;
+		font-size: .85rem;
+		color: #ff0000;
+	}
+</style>
+
+<div class="login">
+	<div class="title">
+		<h1>Log in or sign up</h1>
+	</div>
+	<div class="form">
+		<div class="line">
+			<span class="tag">Username:</span>
+			<input id="usernameInput" />
+		</div>
+		<div class="line">
+			<span class="tag">Password:</span>
+			<input id="passwordInput" type="password" />
+		</div>
+		<div class="line">
+			<a id="loginButton" href="#" class="button">Log in</a>
+		</div>
+		<p class="hintText">To create a new account, specify which group it will be a part of:</p>
+		<div class="line">
+			<span class="tag">Group:</span>
+			<input id="groupInput" />
+		</div>
+		<div class="line">
+			<a id="signupButton" href="#" class="button">Sign up</a>
+		</div>
+		<div class="responseArea">
+			<p class="serverResponse"></p>
+		</div>
+	</div>
+</div>
+
+<script type="application/javascript" src="login/login.js"></script>

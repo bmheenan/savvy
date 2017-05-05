@@ -1,0 +1,47 @@
+<style type="text/css">
+	#mainView {
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
+		width: 100vw;
+	}
+	#header {
+		height: 50px;
+		background-color: #6E675B;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		padding: 10px 20px;
+		justify-content: flex-start;
+	}
+	#header h1 {
+		margin: 0;
+		margin: 0 0 4pt 0;
+	}
+	#underHeader {
+		flex-grow:1;
+		display: flex;
+		flex-direction: row;
+	}
+	.sidebar {
+		width: 300px;
+		background-color: #403C35;
+	}
+	.messages {
+		padding: 20px;
+	}
+</style>
+
+<!-- #stage -->
+
+<div id="mainView">
+	<div id="header">
+		<h1>savvy</h1>
+	</div>
+	<div id="underHeader">
+		<div class="sidebar"></div>
+		<div class="messages">
+			<p>Loading messages...</p>
+		</div>
+	</div>
+</div>

@@ -1,7 +1,7 @@
 {
-  "name": "sandbox",
+  "name": "savvy",
   "version": "1.0.0",
-  "description": "Messing around",
+  "description": "An experimental messaging app",
   "main": "index.js",
   "scripts": {
     "test": "mocha",

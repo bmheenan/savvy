@@ -8,15 +8,12 @@ Sets up server and directs all incoming traffic to the server
 // Requires
 const express = require("express");
 const http = require("http");
-const https = require("https");
-const fs = require("fs");
 const log = require("./logger");
 const api = require("./api");
 const parser = require("body-parser");
 
 // Variables
 const port = 8080;
-const portSsl = 443;
 var app = express();
 
 // Public
@@ -34,13 +31,7 @@ go();
 Set up for routing all incoming requests, formatting them for the APIs, and starting listening
 */
 function go() {	
-	// Setup to force SSL
-	var sslOptions = {
-		key: fs.readFileSync("./ssl/savvy.key"),
-		cert: fs.readFileSync("./ssl/savvy.crt")
-	};
 	var server = http.createServer(app);
-	var secureServer = https.createServer(sslOptions, app);
 	
 	// Set headers and format request
 	app.use(function (req, res, next) {
@@ -71,7 +62,6 @@ function go() {
 	app.post("/api/*", api.post);
 	
 	// Start listening
-	secureServer.listen(portSsl, (error) => { onListen(error, "https", portSsl); });
 	server.listen(port, (error) => { onListen(error, "http", port) });
 }
 

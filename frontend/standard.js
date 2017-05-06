@@ -94,3 +94,44 @@ function load(params) {
 		if (params.callback) { params.callback(undefined) };
 	}
 }
+
+/*
+Writes a new cookie
+
+name		The name of the cookie
+value		The value of the cookie
+maxAge		Optionally set the expiry, in seconds. If not provided, defaults to 1 day
+*/
+function setCookie(name, value, maxAge) {
+	var maxAgeFinal;
+	if (maxAge) {
+		maxAgeFinal = maxAge;
+	} else {
+		maxAgeFinal = 60 * 60 * 24;	// 1 day
+	}
+	document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + ";path=/;max-age=" + maxAgeFinal +";";
+}
+
+/*
+Returns the value of the given cookie. Returns undefined if there's no match
+
+name 		The name of the cookie
+*/
+function getCookie(name) {
+	var cookies = document.cookie.split(";");
+	for (var i in cookies) {
+		var cookie = cookies[i].split("=");
+		if (cookie[0] === name) {
+			return cookie[1];
+		}
+	}
+}
+
+/*
+Deletes a cookie
+
+name		The name of the cookie to delete
+*/
+function deleteCookie(name) {
+	document.cookie = encodeURIComponent(name) + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+}

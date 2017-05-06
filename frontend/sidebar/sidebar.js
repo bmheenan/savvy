@@ -6,5 +6,7 @@ function go() {
 
 function logout(e) {
 	e.preventDefault();
-	alert("Refresh to log out");
+	jsonWebToken = undefined;
+	deleteCookie("jsonWebToken");
+	location.reload();
 }

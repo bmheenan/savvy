@@ -7,6 +7,7 @@ Sets up server and directs all incoming traffic to the server
 
 // Requires
 const express = require("express");
+const http = require("http");
 const log = require("./logger");
 const api = require("./api");
 const parser = require("body-parser");
@@ -30,8 +31,7 @@ go();
 Set up for routing all incoming requests, formatting them for the APIs, and starting listening
 */
 function go() {	
-	// Make front end accessible to traffic
-	app.use(express.static("./frontend"));
+	var server = http.createServer(app);
 	
 	// Set headers and format request
 	app.use(function (req, res, next) {
@@ -43,19 +43,33 @@ function go() {
 	app.use(parser.urlencoded({ extended: true }));
 	app.use(parser.json());
 	
+	// Will redirect all external traffic to https
+	// Adapted from express-force-https
+	app.use(function(req, res, next) {
+		var schema = (req.headers["x-forwarded-proto"] || "").toLowerCase();
+  		if (req.headers.host.indexOf("localhost") < 0 && req.headers.host.indexOf("127.0.0.1") < 0 && schema !== "https") {
+    		res.redirect("https://" + req.headers.host + req.url);
+  		} else {
+    		next();
+  		}
+	});
+	
+	// Make front end accessible to traffic
+	app.use(express.static("./frontend"));
+	
 	// All GET and POST requests to /api/ get handled by api.js
 	app.get("/api/*", api.get);
 	app.post("/api/*", api.post);
 	
 	// Start listening
-	app.listen(port, onListen);
+	server.listen(port, (error) => { onListen(error, "http", port) });
 }
 
-function onListen(error) {
+function onListen(error, name, activePort) {
 	if (error) {
 		log.line("Error trying to set up server:", "error");
 		log.line(error, "error");
 		return;
 	}
-	log.line(`Listening on port ${port}`, 0);
+	log.line(`${name} server listening on port ${activePort}`, 0);
 }

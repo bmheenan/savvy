@@ -72,6 +72,7 @@ function returnFromSubmit(error, response) {
 	response = JSON.parse(response);
 	if (response.success) {
 		jsonWebToken = response.token;
+		setCookie("jsonWebToken", response.token)
 		load({
 			path: "main-view/main-view.html",
 			stage: "#stage",

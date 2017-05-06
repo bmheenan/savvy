@@ -76,14 +76,15 @@ function userNew(request, response) {
 	}
 	
 	// Search for the username among exisiting users to ensure it's new
-	const query = data.store().createQuery("user").filter("__key__", "=", data.store().key(["user", request.body.username.toLowerCase()]));
-	data.store().runQuery(query, (error, results) => { checkUniquenessAndAdd(error, results, request, response) });
+	data.store().get(data.store().key(["user", request.body.username]), (error, result) => {
+		checkUniquenessAndAdd(error, result, request, response);
+	});
 }
 
 /*
 Once we have the list of users, verify this username is unique, and then add it to the database
 */
-function checkUniquenessAndAdd(error, results, request, response) {
+function checkUniquenessAndAdd(error, result, request, response) {
 	if (error) {
 		log.line("Could not check if username exists", "error");
 		log.line(error, "error");
@@ -91,7 +92,8 @@ function checkUniquenessAndAdd(error, results, request, response) {
 		return;
 	}
 	
-	if (results.length > 0) {
+	// If the previous query returned something, the name is already taken
+	if (result) {
 		log.line("Username already exists", 2);
 		response.status(200).send(JSON.stringify({
 			success: false,
@@ -100,6 +102,7 @@ function checkUniquenessAndAdd(error, results, request, response) {
 		return;
 	}
 	
+	// Otherwise, create the new user
 	const hashedPassword = hasher.generate(request.body.password);
 	const entity = {
 		key: data.store().key([

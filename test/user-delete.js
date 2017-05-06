@@ -13,13 +13,7 @@ const chai = require("chai");
 const expect = chai.expect;
 const chaiHttp = require("chai-http");
 const server = require("../backend/router").app;
-
-// Variables
-const cred = {
-	username: "testusername",
-	password: "password123",
-	group: "internaltest"
-}
+const cred = require("./credentials").accounts[0];
 
 /////////////
 // Control //
@@ -127,21 +121,19 @@ describe("api/user-delete", function() {
 	});
 
 	it("must remove the user from the datastore when the delete is confirmed", function(done) {
-		setTimeout(function() {
-			chai.request(server)
-			.post("/api/user-authenticate")
-			.send({
-				username: cred.username,
-				password: cred.password
-			})
-			.end(function(error, response) {
-				expect(response).to.have.status(200);
-				expect(response).to.be.json;
-				const responseTxt = JSON.parse(response.text);
-				expect(responseTxt.success).to.be.false;
-				expect(responseTxt.reason).to.equal("Username not found");
-				done();
-			});
-		}, 100);	// We perform this test after a small timeout, since strong consistency in Google Cloud datastore is not guaranteed
+		chai.request(server)
+		.post("/api/user-authenticate")
+		.send({
+			username: cred.username,
+			password: cred.password
+		})
+		.end(function(error, response) {
+			expect(response).to.have.status(200);
+			expect(response).to.be.json;
+			const responseTxt = JSON.parse(response.text);
+			expect(responseTxt.success).to.be.false;
+			expect(responseTxt.reason).to.equal("Username not found");
+			done();
+		});
 	});
 });

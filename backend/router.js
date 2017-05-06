@@ -52,12 +52,12 @@ function go() {
 	app.use(parser.urlencoded({ extended: true }));
 	app.use(parser.json());
 	
-	// Will redirect all traffic to https
+	// Will redirect all external traffic to https
 	// Adapted from express-force-https
 	app.use(function(req, res, next) {
-		var schema = (req.headers['x-forwarded-proto'] || '').toLowerCase();
+		var schema = (req.headers["x-forwarded-proto"] || "").toLowerCase();
   		if (req.headers.host.indexOf("localhost") < 0 && req.headers.host.indexOf("127.0.0.1") < 0 && schema !== "https") {
-    		res.redirect('https://' + req.headers.host + req.url);
+    		res.redirect("https://" + req.headers.host + req.url);
   		} else {
     		next();
   		}
@@ -71,16 +71,15 @@ function go() {
 	app.post("/api/*", api.post);
 	
 	// Start listening
-	secureServer.listen(portSsl, onListen);
-	server.listen(port, onListen);
+	secureServer.listen(portSsl, (error) => { onListen(error, "https", portSsl); });
+	server.listen(port, (error) => { onListen(error, "http", port) });
 }
 
-function onListen(error) {
+function onListen(error, name, activePort) {
 	if (error) {
 		log.line("Error trying to set up server:", "error");
 		log.line(error, "error");
 		return;
 	}
-	// We should see this line twice: once for the http server and once for the https
-	log.line("Server listening", 0);
+	log.line(`${name} server listening on port ${activePort}`, 0);
 }

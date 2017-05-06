@@ -52,31 +52,10 @@ function userDelete(request, response, token) {
 		response.sendStatus(400);
 		return;
 	}
-	const query = data.store().createQuery("user").filter("__key__", "=", data.store().key(["user", token.username])).select("__key__");
-	data.store().runQuery(query, (error, keys) => { deleteUserWithKey(error, keys, response); });
-}
-
-/*
-Given the key to delete, do so.
-
-error		if there was an error finding the key
-key			a list that must contain exactly one user and their key
-response	the response to send back to the client
-*/
-function deleteUserWithKey(error, keys, response) {
-	if (error) {
-		log.line("Error getting list with user to delete", "error");
-		log.line(error, "error");
-		response.sendStatus(500);
-		return;
-	}
-	if (keys.length !== 1) {
-		log.line("There wasn't exactly one matching key given the username", "error");
-		response.sendStatus(500);
-		return;
-	}
-	const key = keys[0][data.store().KEY];
-	data.store().delete(key, (error) => { onDeleteComplete(error, response); });
+	
+	data.store().delete(data.store().key(["user", token.username]), (error) => {
+		onDeleteComplete(error, response);
+	});
 }
 
 /*

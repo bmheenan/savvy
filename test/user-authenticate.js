@@ -13,13 +13,7 @@ const chai = require("chai");
 const expect = chai.expect;
 const chaiHttp = require("chai-http");
 const server = require("../backend/router").app;
-
-// Variables
-const cred = {
-	username: "testusername",
-	password: "password123",
-	group: "internaltest"
-}
+const cred = require("./credentials").accounts[0];
 
 /////////////
 // Control //

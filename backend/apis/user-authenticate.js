@@ -44,13 +44,17 @@ function userAuthenticate(request, response) {
 		return;
 	}
 	
-	const query = data.store().createQuery("user").filter("__key__", "=", data.store().key(["user", request.body.username.toLowerCase()]));
-	data.store().runQuery(query, (error, users) => { checkFieldsAndRespond(error, users, request, response); });
+	data.store().get(data.store().key(["user", request.body.username]), (error, user) => {
+		checkFieldsAndRespond(error, user, request, response);
+	});
+	
+	//const query = data.store().createQuery("user").filter("__key__", "=", data.store().key(["user", request.body.username.toLowerCase()]));
+	//data.store().runQuery(query, (error, users) => { checkFieldsAndRespond(error, users, request, response); });
 }
 /*
 Once we have the matching user from the database, verify and respond
 */
-function checkFieldsAndRespond(error, users, request, response) {
+function checkFieldsAndRespond(error, user, request, response) {
 	if (error) {
 		log.line("Error trying to retreive users", "error");
 		log.line(error, "error");
@@ -61,7 +65,7 @@ function checkFieldsAndRespond(error, users, request, response) {
 	response.setHeader("Content-Type", "application/json");
 	
 	// Check to see if the username exists
-	if (users.length === 0) {
+	if (!user) {
 		log.line(`User ${request.body.username} not found`, 2);
 		response.status(200).send(JSON.stringify({
 			success: false,
@@ -70,14 +74,8 @@ function checkFieldsAndRespond(error, users, request, response) {
 		return;
 	}
 	
-	if (users.length > 1) {
-		log.line("More than one matching user found", "error");
-		resonse.sendStatus(500);
-		return;
-	}
-	
 	// Now check the password
-	if (!hasher.verify(request.body.password, users[0].password)) {
+	if (!hasher.verify(request.body.password, user.password)) {
 		log.line("Password did not match", 2);
 		response.status(200).send(JSON.stringify({
 			success: false,
@@ -90,8 +88,8 @@ function checkFieldsAndRespond(error, users, request, response) {
 	response.status(200).send(JSON.stringify({
 		success: true,
 		token: jwt.sign({
-			username: users[0].username,
-			group: users[0].group
+			username: user.username,
+			group: user.group
 		}, jwtSecret.secret, {
 			expiresIn: "7 days"
 		})

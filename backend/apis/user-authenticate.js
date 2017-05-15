@@ -47,10 +47,8 @@ function userAuthenticate(request, response) {
 	data.store().get(data.store().key(["user", request.body.username]), (error, user) => {
 		checkFieldsAndRespond(error, user, request, response);
 	});
-	
-	//const query = data.store().createQuery("user").filter("__key__", "=", data.store().key(["user", request.body.username.toLowerCase()]));
-	//data.store().runQuery(query, (error, users) => { checkFieldsAndRespond(error, users, request, response); });
 }
+
 /*
 Once we have the matching user from the database, verify and respond
 */

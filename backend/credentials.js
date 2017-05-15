@@ -6,7 +6,7 @@ Validates that usernames and passwords meet requrements.
 "use strict";
 
 // Variables
-const invalidUsernameMessage = "must be at least 4 characters, and can contain only letters and numbers";
+const invalidUsernameMessage = "must be at least 4 characters, and can contain only letters, numbers, and the - (dash) character";
 const invalidPasswordMessage = "must be at least 8 characters, and can contain only letters, numbers, and the special characters: ~, !, @, #, $, %, ^, &, *, ., _, -, <space>, and ?";
 
 // Public
@@ -14,7 +14,8 @@ module.exports = {
 	invalidUsernameMessage,
 	invalidPasswordMessage,
 	isValidUsername,
-	isValidPassword
+	isValidPassword,
+	isValidGroupName
 };
 
 /////////////
@@ -31,11 +32,14 @@ function isValidUsername(username) {
 	if (username.length < 4) { return false; }
 	
 	// Only contains valid characters
-	var usernameLower = username.toLowerCase();
-	for (var i = 0; i < usernameLower.length; i++) {
-		var code = usernameLower.charCodeAt(i);
+	const validSpecial = "-";
+	for (var i = 0; i < username.length; i++) {
+		var char = username.charAt(i);
+		var code = username.charCodeAt(i);
 		if (!(code > 47 && code < 58) &&			// 0 - 9
-			!(code > 96 && code < 123)) {			// a - z
+		    !(code > 64 && code < 91) &&			// A - Z
+			!(code > 96 && code < 123) &&			// a - z
+			!(validSpecial.indexOf(char) >= 0)) {	// special
 			return false;
 		}
 	}

@@ -53,7 +53,9 @@ function ajax(params) {
 	}
 	return xhr;
 	
-	/* Basic first level check that an ajax request is well formed */
+	/*
+	Basic first level check that an ajax request is well formed
+	*/
 	function validAjaxRequest(params) {
 		if (!(params.url && params.type)) {
 			return false;

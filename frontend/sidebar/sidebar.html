@@ -1,7 +1,7 @@
 <style type="text/css">
 	.sidebar a {
 		text-decoration: none;
-		color: #83BAFF;
+		color: #2536CC;
 		padding: 20px;
 	}
 	.sidebar p {
@@ -10,6 +10,7 @@
 	.sidebar {
 		display: flex;
 		flex-direction: column;
+		background-color: #eeeeee;
 	}
 	.sidebarBottom {
 		flex-grow: 1;
@@ -22,7 +23,10 @@
 <!-- .sidebar -->
 
 <div class="sidebarTop">
-	<p>You're logged in</p>
+	<div class="breadcrumbs"></div>
+	<div class="currentChannel"></div>
+	<div class="subchannels"></div>
+	<div class="newChannel"></div>
 </div>
 <div class="sidebarBottom">
 	<a href="#" id="logoutButton">Log out</a>

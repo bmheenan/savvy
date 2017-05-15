@@ -66,7 +66,7 @@ function userNew(request, response) {
 		return;
 	}
 	
-	if (!cred.isValidUsername(request.body.group)) {
+	if (!cred.isValidGroupName(request.body.group)) {
 		log.line("Not a valid group", 2);
 		response.status(200).send(JSON.stringify({
 			success: false,
@@ -117,7 +117,16 @@ function checkUniquenessAndAdd(error, result, request, response) {
 		}, ["password", "created"])
 	};
 	
-	data.store().save(entity, (error) => { respond(error, request, response) });
+	const group = {
+		key: data.store().key(["group", request.body.group.toLowerCase()]),
+		data: data.toDatastore({
+			active: true
+		}, ["active"])
+	}
+	
+	data.store().upsert(group).then(() => {
+		data.store().save(entity, (error) => { respond(error, request, response) });
+	});
 }
 
 /*

@@ -47,7 +47,7 @@ function go() {
 	// Adapted from express-force-https
 	app.use(function(req, res, next) {
 		var schema = (req.headers["x-forwarded-proto"] || "").toLowerCase();
-  		if (req.headers.host.indexOf("localhost") < 0 && req.headers.host.indexOf("127.0.0.1") < 0 && schema !== "https") {
+  		if (schema !== "https" && req.headers.host.indexOf("localhost") < 0 && req.headers.host.indexOf("127.0.0.1") < 0) {
     		res.redirect("https://" + req.headers.host + req.url);
   		} else {
     		next();

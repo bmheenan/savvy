@@ -6,7 +6,9 @@ function go() {
 		url: "api/test-hello",
 		sendToken: true,
 		callback: populateHelloMessage
-	})
+	});
+	$(".newMessageContainer .collapsed").addEventListener("click", expandNewMessageDiv);
+	$(".newMessageContainer .hideButton").addEventListener("click", collapseNewMessageDiv);
 }
 
 function populateHelloMessage(error, response) {
@@ -15,5 +17,22 @@ function populateHelloMessage(error, response) {
 		console.log(error);
 		return;
 	}
-	$(".messages .helloMessage").innerHTML = JSON.parse(response).message;
+	var allMessages = "";
+	var message = JSON.parse(response).message;
+	for (var i = 0; i < 100; i++) {
+		allMessages += "<p>" + message + "</p>";
+	}
+	$(".messages .allMessages").innerHTML = allMessages;
+}
+
+function expandNewMessageDiv(event) {
+	$(".newMessageContainer .expanded").classList.remove("hidden");
+	$(".newMessageContainer .collapsed").classList.add("hidden");
+	$(".messages .allMessages").classList.add("obscured");
+}
+
+function collapseNewMessageDiv(event) {
+	$(".newMessageContainer .expanded").classList.add("hidden");
+	$(".newMessageContainer .collapsed").classList.remove("hidden");
+	$(".messages .allMessages").classList.remove("obscured");
 }

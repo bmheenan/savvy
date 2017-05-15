@@ -174,4 +174,6 @@ describe("api/user-new", function() {
 			done();
 		});
 	});
+	
+	it("must create a new group for the user");
 });

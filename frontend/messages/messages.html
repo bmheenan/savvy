@@ -1,9 +1,79 @@
 <style type="text/css">
-	.messages .helloMessage {
+	.messages .allMessages {
 		margin: 0;
+		padding-bottom: 120px;
+		transition: opacity .5s;
+	}
+	.newMessageContainer {
+		position: fixed;
+		left: 310px;
+		bottom: 10px;
+		background: #eeeeee;
+		overflow: hidden;
+	}
+	.hidden {
+		max-height: 0vh !important;
+		max-width: 0vw !important;
+		opacity: 0 !important;
+	}
+	.obscured {
+		opacity: .3;
+	}
+	.expandNewButton {
+		padding: 10px 15px;
+		color: #ffffff;
+		background-color: #2536CC;
+		display: inline-block;
+		cursor: pointer;
+		white-space: nowrap;
+	}
+	.newMessageContainer > div {
+		transition: max-width .5s, max-height .5s, opacity .5s;
+		opacity: 1;
+		max-height: 100vh;
+		max-width: 100vw;
+		overflow: hidden;
+	}
+	.newMessageContainer .expanded {
+		width: calc(100vw - 20px - 300px);
+		display: flex;
+		flex-direction: column;
+		border: 1px #ccc solid;
+	}
+	.newMessageContainer .expanded textarea {
+		flex-grow: 1;
+		min-height: 100px;
+		margin: 5px;
+	}
+	.newMessageContainer .controls {
+		display: flex;
+		flex-direction: row;
+	}
+	.newMessageContainer .controls > span {
+		padding: 10px 15px;
+		cursor: pointer;
+		display: inline-block;
+	}
+	.newMessageContainer .submitButton {
+		color: #ffffff;
+		background-color: #2536CC;
 	}
 </style>
 
 <!-- .messages -->
 
-<p class="helloMessage">...</p>
+<div class="allMessages">...</div>
+
+<div class="newMessageContainer">
+	
+	<div class="expanded hidden">
+		<textarea></textarea>
+		<div class="controls">
+			<span class="submitButton">Submit</span>
+			<span class="hideButton">Cancel</span>
+		</div>
+	</div>
+	<div class="collapsed">
+		<span class="expandNewButton">+ New thread</span>
+	</div>
+</div>

@@ -2,7 +2,6 @@
 	.sidebar a {
 		text-decoration: none;
 		color: #2536CC;
-		padding: 20px;
 	}
 	.sidebar p {
 		margin: 20px;
@@ -18,6 +17,65 @@
 		flex-direction: column;
 		justify-content: flex-end;
 	}
+	.sidebarBottom a {
+		padding: 20px;
+	}
+	
+	.sidebar .currentChannel {
+		padding: 15px 5px 15px 25px;
+    	background-color: #333;
+    	color: #fff;
+	}
+	.sidebar .subchannels {
+		display: flex;
+		flex-direction: column;
+		padding-left: 15px;
+	}
+	.sidebar .subchannels .loading {
+		margin: 10px;
+		color: #555;
+	}
+	.sidebar .subchannel {
+		padding: 15px 5px 5px 25px;
+		display: inline-block;
+	}
+	
+	.sidebar .newChannel > div {
+		max-height: 60px;
+		padding: 10px;
+		overflow: hidden;
+		transition: max-height .25s, padding .25s;
+	}
+	.sidebar .newChannel > div.hidden {
+		max-height: 0 !important;
+		padding: 0 !important;
+	}
+	.sidebar .newChannel .expandButton {
+		cursor: pointer;
+		color: #2536CC;
+		padding-left: 25px;
+	}
+	.sidebar .newChannel .expandButton:hover {
+		background-color: #fff;
+	}
+	.sidebar .newChannel .input {
+		display: flex;
+		align-items: center;
+	}
+	.sidebar .newChannel .input input {
+		flex-grow: 1;
+	}
+	.sidebar .newChannel .input a {
+		padding: 5px;
+	}
+	.sidebar .newChannel .input input {
+		padding: 5px;
+	}
+	.sidebar .newChannel .ncTitle {
+		padding: 5px;
+		font-size: 10pt;
+		color: #444;
+	}
 </style>
 
 <!-- .sidebar -->
@@ -25,8 +83,20 @@
 <div class="sidebarTop">
 	<div class="breadcrumbs"></div>
 	<div class="currentChannel"></div>
-	<div class="subchannels"></div>
-	<div class="newChannel"></div>
+	<div class="subchannels"><span class="loading">Loading channels...</span></div>
+	<div class="newChannel">
+		<div class="expandButton">
+			<span>+ new</span>
+		</div>
+		<div class="expanded hidden">
+			<span class="ncTitle">Create new channel:</span>
+			<div class="input">
+				<input></input>
+				<a href="#" class="newChannelSubmit">create</a>
+				<a href="#" class="collapseButton">x</a>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="sidebarBottom">
 	<a href="#" id="logoutButton">Log out</a>

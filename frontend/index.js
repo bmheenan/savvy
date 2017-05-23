@@ -6,7 +6,7 @@ Sets up front end
 "use strict";
 
 // Globals
-var jsonWebToken;
+var globals = {}; 
 
 /////////////
 // Control //
@@ -14,12 +14,14 @@ var jsonWebToken;
 
 document.addEventListener("DOMContentLoaded", function(e) {
 	// If we have a valid token, use it
-	if (getCookie("jsonWebToken")) {
-		jsonWebToken = getCookie("jsonWebToken");
+	if (getCookie("jsonWebToken") && getCookie("username") && getCookie("group")) {
+		globals.jsonWebToken = getCookie("jsonWebToken");
+		globals.group = getCookie("group");
+		globals.username = getCookie("username");
 	}
 	
-	// If no token, present the login screen
-	if (!jsonWebToken) {
+	// If any logged in user info is missing, present the login screen
+	if (!globals.jsonWebToken || !globals.username || !globals.group) {
 		load({
 			path: "login/login.html",
 			stage: "#stage",

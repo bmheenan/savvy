@@ -175,5 +175,16 @@ describe("api/user-new", function() {
 		});
 	});
 	
-	it("must create a new group for the user");
+	it("must create a new group for the user", function(done) {
+		chai.request(server)
+		.post("/api/channel-get-list")
+		.set("x-access-token", jsonWebToken)
+		.send({
+			path: [cred.group]
+		})
+		.end(function(error, response) {
+			expect(response).to.have.status(200);
+			done();
+		})
+	});
 });

@@ -21,7 +21,7 @@ const cred = require("./credentials").accounts[0];
 
 chai.use(chaiHttp);
 
-describe("api/channel-get", function() {
+describe("api/channel-get-list", function() {
 	this.slow(1000);
 	this.timeout(5000);
 	
@@ -29,6 +29,7 @@ describe("api/channel-get", function() {
 	
 	// Make sure the test user exists. If not, create it
 	before(function(done) {
+		this.timeout(10000);	// This one might take a while
 		chai.request(server)
 		.post("/api/user-authenticate")
 		.send({
@@ -110,9 +111,9 @@ describe("api/channel-get", function() {
 		}
 	});
 	
-	it("must not respond to requests without a token", function(done) {
+	it("must respond with status 400 to requests without a token", function(done) {
 		chai.request(server)
-		.post("/api/channel-get")
+		.post("/api/channel-get-list")
 		.send({
 			path: [cred.group]
 		})
@@ -122,9 +123,9 @@ describe("api/channel-get", function() {
 		});
 	});
 	
-	it("must not respond to requests where the token doesn't match the group requested", function(done) {
+	it("must respond with status 400 to requests where the token doesn't match the group requested", function(done) {
 		chai.request(server)
-		.post("/api/channel-get")
+		.post("/api/channel-get-list")
 		.set("x-access-token", jsonWebToken)
 		.send({
 			path: ["not-a-matching-group"]
@@ -137,7 +138,7 @@ describe("api/channel-get", function() {
 	
 	it("must return a list of top level channels when only the group name is provided", function(done) {
 		chai.request(server)
-		.post("/api/channel-get")
+		.post("/api/channel-get-list")
 		.set("x-access-token", jsonWebToken)
 		.send({
 			path: [cred.group]
@@ -154,7 +155,7 @@ describe("api/channel-get", function() {
 	
 	it("must return a list of channels under the given channel when one is provided", function(done) {
 		chai.request(server)
-		.post("/api/channel-get")
+		.post("/api/channel-get-list")
 		.set("x-access-token", jsonWebToken)
 		.send({
 			path: [cred.group, "group-1"]
@@ -166,5 +167,31 @@ describe("api/channel-get", function() {
 			expect(responseTxt[0].name).to.equal("group-1-1");
 			done();
 		});
+	});
+	
+	it("must return an empty list for a valid group without any channels", function(done) {
+		chai.request(server)
+		.post("/api/group-clear")
+		.set("x-access-token", jsonWebToken)
+		.send({
+			groupToClear: cred.group
+		})
+		.end(function(error, response) {
+			expect(response).to.have.status(200);
+			expect(JSON.parse(response.text).success).to.equal(true);
+			chai.request(server)
+			.post("/api/channel-get-list")
+			.set("x-access-token", jsonWebToken)
+			.send({
+				path: [cred.group]
+			})
+			.end(function(error2, response2) {
+				expect(response2).to.have.status(200);
+				const responseTxt = JSON.parse(response2.text);
+				expect(response2).to.be.json;
+				expect(responseTxt.length).to.equal(0);
+				done();
+			});
+		})
 	});
 });

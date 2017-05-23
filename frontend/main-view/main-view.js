@@ -1,6 +1,6 @@
-go();
+mainView();
 
-function go() {
+function mainView() {
 	load({
 		path: "sidebar/sidebar.html",
 		stage: ".sidebar",

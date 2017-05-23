@@ -14,11 +14,11 @@ const apiMap = {
 		"test-hello": require("./apis/test-hello").testHello
 	},
 	"POST": {
-		"channel-get": require("./apis/channel-get").channelGet,
+		"channel-get-list": require("./apis/channel-get-list").channelGetList,
 		"channel-new": require("./apis/channel-new").channelNew,
-		
 		"group-clear": require("./apis/group-clear").groupClear,
-		
+		"message-get-list": require("./apis/message-get-list").messageGetList,
+		"message-new": require("./apis/message-new").messageNew,
 		"user-new": require("./apis/user-new").userNew,
 		"user-authenticate": require("./apis/user-authenticate").userAuthenticate,
 		"user-delete": require("./apis/user-delete").userDelete

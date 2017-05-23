@@ -125,14 +125,14 @@ function checkUniquenessAndAdd(error, result, request, response) {
 	}
 	
 	data.store().upsert(group).then(() => {
-		data.store().save(entity, (error) => { respond(error, request, response) });
+		data.store().save(entity, (error) => { respond(error, request, response, request.body.username.toLowerCase(), request.body.group.toLowerCase()) });
 	});
 }
 
 /*
 Once the datastore confirms the insert, respond to the request with success and a JSON web token
 */
-function respond(error, request, response) {
+function respond(error, request, response, username, group) {
 	if (error) {
 		log.line("Error saving new user to datastore", "error");
 		log.ling(error, "error");
@@ -148,6 +148,8 @@ function respond(error, request, response) {
 			group: request.body.group.toLowerCase()
 		}, jwtSecret.secret, {
 			expiresIn: "7 days"
-		})
+		}),
+		username: username,
+		group: group
 	}));
 }

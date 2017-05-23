@@ -42,7 +42,7 @@ function ajax(params) {
 		if (xhr.readyState > 3) { params.callback(undefined, xhr.responseText); }
 	}
 	if (params.sendToken) {
-		xhr.setRequestHeader("x-access-token", jsonWebToken);
+		xhr.setRequestHeader("x-access-token", globals.jsonWebToken);
 	}
 	if (params.type === "GET") {
 		xhr.send();
@@ -111,7 +111,7 @@ function setCookie(name, value, maxAge) {
 	} else {
 		maxAgeFinal = 60 * 60 * 24;	// 1 day
 	}
-	document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + ";path=/;max-age=" + maxAgeFinal +";";
+	document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + ";path=/;max-age=" + maxAgeFinal + ";";
 }
 
 /*
@@ -123,8 +123,8 @@ function getCookie(name) {
 	var cookies = document.cookie.split(";");
 	for (var i in cookies) {
 		var cookie = cookies[i].split("=");
-		if (cookie[0] === name) {
-			return cookie[1];
+		if (cookie[0].trim() === name) {
+			return cookie[1].trim();
 		}
 	}
 }

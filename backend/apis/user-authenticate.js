@@ -90,7 +90,9 @@ function checkFieldsAndRespond(error, user, request, response) {
 			group: user.group
 		}, jwtSecret.secret, {
 			expiresIn: "7 days"
-		})
+		}),
+		username: user.username,
+		group: user.group
 	}));
 	log.line("Successfully signed in", 2);
 }

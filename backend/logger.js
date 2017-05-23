@@ -6,7 +6,13 @@ Writes to the console in a consistent format, and allows the programmer to set a
 "use strict";
 
 // Public
-module.exports.line = logLine;
+module.exports = {
+	line: logLine,
+	_: _,
+	__: __,
+	___: ___,
+	error: error
+}
 
 // Variables
 const prefixMap = {
@@ -33,3 +39,11 @@ function logLine(input, level) {
 		console.log(`${prefixMap[level]}${input}`);
 	}
 }
+
+function _(input) { logLine(input, 0); }
+
+function __(input) { logLine(input, 1); }
+
+function ___(input) { logLine(input, 2); }
+
+function error(input) { logLine(input, "error"); }

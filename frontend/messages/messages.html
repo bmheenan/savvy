@@ -10,10 +10,11 @@
 		bottom: 10px;
 		background: #eeeeee;
 		overflow: hidden;
+		display: flex;
 	}
-	.hidden {
-		max-height: 0vh !important;
-		max-width: 0vw !important;
+	.messages .hidden {
+		max-height: 0px !important;
+		max-width: 0px !important;
 		opacity: 0 !important;
 	}
 	.obscured {
@@ -28,9 +29,9 @@
 		white-space: nowrap;
 	}
 	.newMessageContainer > div {
-		transition: max-width .5s, max-height .5s, opacity .5s;
+		transition: max-width .5s, max-height .25s, opacity .25s;
 		opacity: 1;
-		max-height: 100vh;
+		max-height: 200px;
 		max-width: 100vw;
 		overflow: hidden;
 	}
@@ -62,10 +63,12 @@
 
 <!-- .messages -->
 
-<div class="allMessages">...</div>
+<div class="allMessages">Pick a channel</div>
 
 <div class="newMessageContainer">
-	
+	<div class="collapsed">
+		<span class="expandNewButton">+ New thread</span>
+	</div>
 	<div class="expanded hidden">
 		<textarea></textarea>
 		<div class="controls">
@@ -73,7 +76,5 @@
 			<span class="hideButton">Cancel</span>
 		</div>
 	</div>
-	<div class="collapsed">
-		<span class="expandNewButton">+ New thread</span>
-	</div>
+	
 </div>

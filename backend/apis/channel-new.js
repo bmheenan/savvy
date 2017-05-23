@@ -141,6 +141,7 @@ function respond(error, response) {
 		response.sendStatus(500);
 		return;
 	}
+	log.line("Success", 2);
 	response.status(200).send(JSON.stringify({
 		success: true
 	}));

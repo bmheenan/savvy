@@ -13,7 +13,7 @@ const hasFields = require("../has-fields");
 
 // Public
 module.exports = {
-	channelGet: channelGetPreAuth
+	channelGetList: channelGetPreAuth
 }
 
 /////////////
@@ -21,7 +21,7 @@ module.exports = {
 /////////////
 
 function channelGetPreAuth(request, response) {
-	log.line("Get channels", 1);
+	log.line("Get channel list", 1);
 	gatekeeper.gate(request, response, getChannels);
 }
 
@@ -64,11 +64,15 @@ function returnResults(error, results, response) {
 		response.sendStatus(500);
 		return;
 	}
+	
+	response.setHeader("Content-Type", "application/json");
+	
 	const formattedResults = results.map((channel) => {
 		return {
 			name: channel.name,
 			key: channel[data.store().KEY]
 		};
 	});
+	log.line(`Returning ${formattedResults.length} channels`, 2);
 	response.status(200).send(formattedResults);
 }

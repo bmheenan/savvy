@@ -10,6 +10,7 @@ const log = require("../logger");
 const data = require("../data");
 const gatekeeper = require("../jwt-gatekeeper");
 const hasFields = require("../has-fields");
+const pathfinder = require("../pathfinder");
 
 // Public
 module.exports = {
@@ -20,11 +21,21 @@ module.exports = {
 // Control //
 /////////////
 
+/*
+Gets a list of channels underneath the given channel
+request		must have a path, an array of [group, channel, channel, ...]
+response	will return an array of objects each representing channels directly under the given channel/group with:
+				name: the name of the channel
+				path: the path of the channel
+*/
 function channelGetPreAuth(request, response) {
 	log.line("Get channel list", 1);
 	gatekeeper.gate(request, response, getChannels);
 }
 
+/*
+Once authenticated, do the work of the API
+*/
 function getChannels(request, response, token) {
 	if (!hasFields.has(request, ["path"])) {
 		log.line("Missing the path of the channel list", "error");
@@ -42,21 +53,18 @@ function getChannels(request, response, token) {
 		response.sendStatus(400);
 		return;
 	}
-	
-	var formattedPath = ["group", path[0]];
-	var pathString = path[0] + "/";
-	for (var i = 1; i < path.length; i++) {
-		formattedPath.push("channel");
-		formattedPath.push(path[i]);
-		pathString += path[i] + "/";
-	}
+
+	var formattedPath = pathfinder.toVerbose(path);
+	var pathString = pathfinder.toString(path);
 	
 	const query = data.store().createQuery("channel")
-	.hasAncestor(data.store().key(formattedPath))
 	.filter("parent", "=", pathString);
 	data.store().runQuery(query, (error, results) => { returnResults(error, results, response); });
 }
 
+/*
+Format and return results
+*/
 function returnResults(error, results, response) {
 	if (error) {
 		log.line("Error getting channels", "error");
@@ -66,11 +74,10 @@ function returnResults(error, results, response) {
 	}
 	
 	response.setHeader("Content-Type", "application/json");
-	
 	const formattedResults = results.map((channel) => {
 		return {
 			name: channel.name,
-			key: channel[data.store().KEY]
+			path: pathfinder.toSimple(channel[data.store().KEY].path)
 		};
 	});
 	log.line(`Returning ${formattedResults.length} channels`, 2);

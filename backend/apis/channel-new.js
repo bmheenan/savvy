@@ -10,6 +10,7 @@ const data = require("../data");
 const log = require("../logger");
 const gatekeeper = require("../jwt-gatekeeper");
 const auth = require("../credentials");
+const pathfinder = require("../pathfinder");
 
 // Public
 module.exports = {
@@ -21,7 +22,7 @@ module.exports = {
 /////////////
 
 /*
-Creates a new channel. Expects request to contain a name (that will be validated as a group name) and potentially a parent path. If the creation is successful, response will contain:
+Creates a new channel. Expects request to contain a name (that will be validated as a group name) and potentially a parent path. If no path is provided, the channel will be created directly in the group. If a path is provided, it must include the group name. If the creation is successful, response will contain:
 	success: true
 Otherwise it will contain:
 	success: false,
@@ -60,15 +61,11 @@ function channelNew(request, response, token) {
 	}
 	
 	if (params.parent) {
+		log.___("Parent provided");
 		// This channel will be a child of an existing channel
 		// Ensure the parent already exists
-		var parentKey = ["group", token.group];
-		var parentFilter = token.group + "/";
-		for (var i in params.parent) {
-			parentKey.push("channel");
-			parentKey.push(params.parent[i]);
-			parentFilter += params.parent[i] + "/";
-		}
+		var parentKey = pathfinder.toVerbose(params.parent);
+		var parentFilter = pathfinder.toString(params.parent);
 		var thisKey = parentKey.slice();
 		thisKey.push("channel");
 		thisKey.push(params.name);
@@ -76,6 +73,8 @@ function channelNew(request, response, token) {
 			verifyNewThenInsertNewChannel(error, result, thisKey, parentFilter, response);
 		});
 	} else {
+		log.___("No parent. New channel at top level in group");
+		// With no parent lookup needed, pass undefined to error, and the group name to parent
 		verifyNewThenInsertNewChannel(undefined, token.group, ["group", token.group, "channel", params.name], token.group + "/", response);
 	}
 }
@@ -85,14 +84,14 @@ Ensure that if a parent key was provided it exists, then look to see if the chan
 */
 function verifyNewThenInsertNewChannel(error, parent, key, parentFilter, response) {
 	if (error) {
-		log.line("Error trying to find parent", "error");
-		log.line(JSON.stringify(key), "error");
+		log.error("Error trying to find parent");
+		log.error(JSON.stringify(key));
 		response.sendStatus(500);
 		return;
 	}
 	if (!parent) {
-		log.line("Parent was not found", "error");
-		log.line(JSON.stringify(key), "error");
+		log.error("Parent was not found");
+		log.error(JSON.stringify(key));
 		response.sendStatus(400);
 		return;
 	}

@@ -100,7 +100,7 @@ describe("api/message-get-list", function() {
 						.set("x-access-token", jsonWebToken)
 						.send({
 							name: "channel-1-1",
-							parent: ["channel-1"]
+							parent: [cred.group, "channel-1"]
 						})
 						.end(function(error4, response4) {
                             expect(response4).to.have.status(200);
@@ -219,7 +219,7 @@ describe("api/message-get-list", function() {
         });
     });
 
-    it("must return the messages in a given channel, with a subchannel", function(done) {
+    it("must return the messages in a given channel in order, including within a subchannel", function(done) {
         chai.request(server)
         .post("/api/message-get-list")
         .set("x-access-token", jsonWebToken)
@@ -228,7 +228,9 @@ describe("api/message-get-list", function() {
         })
         .end(function(error, response) {
             expect(response).to.have.status(200);
-            expect(JSON.parse(response.text).length).to.equal(2);
+            const responseTxt = JSON.parse(response.text);
+            expect(responseTxt.length).to.equal(2);
+            expect(responseTxt[0].timestamp).to.be.below(responseTxt[1].timestamp);
             done();
         });
     });
@@ -262,5 +264,35 @@ describe("api/message-get-list", function() {
             expect(responseTxt.length).to.equal(0);
             done();
         });
+    });
+
+    it("must return messages in order of when they were inserted", function(done) {
+        chai.request(server)
+        .post("/api/message-new")
+        .set("x-access-token", jsonWebToken)
+        .send({
+            author: cred.username,
+            text: "Some message text",
+            path: [cred.group]
+        })
+        .end(function(error, response) {
+            expect(response).to.have.status(200);
+            chai.request(server)
+            .post("/api/message-get-list")
+            .set("x-access-token", jsonWebToken)
+            .send({
+                path: [cred.group]
+            })
+            .end(function(error, response) {
+                expect(response).to.have.status(200);
+                const responseTxt = JSON.parse(response.text);
+                expect(responseTxt.length).to.equal(4);
+                // Iterate through all of them to make sure each is in order
+                for (var i = 0; i < responseTxt.length - 1; i++) {
+                    expect(responseTxt[i].timestamp).to.be.below(responseTxt[i + 1].timestamp);
+                }
+                done();
+            })
+        })
     });
 });

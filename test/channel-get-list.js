@@ -79,7 +79,7 @@ describe("api/channel-get-list", function() {
 				.post("/api/channel-new")
 				.set("x-access-token", jsonWebToken)
 				.send({
-					name: "group-1"
+					name: "channel-1"
 				})
 				.end(function(error2, response2) {
 					expect(response2).to.have.status(200);
@@ -88,7 +88,7 @@ describe("api/channel-get-list", function() {
 					.post("/api/channel-new")
 					.set("x-access-token", jsonWebToken)
 					.send({
-						name: "group-2"
+						name: "channel-2"
 					})
 					.end(function(error3, response3) {
 						expect(response3).to.have.status(200);
@@ -97,8 +97,8 @@ describe("api/channel-get-list", function() {
 						.post("/api/channel-new")
 						.set("x-access-token", jsonWebToken)
 						.send({
-							name: "group-1-1",
-							parent: ["group-1"]
+							name: "channel-1-1",
+							parent: [cred.group, "channel-1"]
 						})
 						.end(function(error4, response4) {
 							expect(response4).to.have.status(200);
@@ -147,8 +147,10 @@ describe("api/channel-get-list", function() {
 			expect(response).to.have.status(200);
 			const responseTxt = JSON.parse(response.text);
 			expect(responseTxt.length).to.equal(2);
-			expect(responseTxt[0].name).to.equal("group-1");
-			expect(responseTxt[1].name).to.equal("group-2");
+			expect(responseTxt[0].name).to.equal("channel-1");
+			expect(responseTxt[0].path).to.deep.equal([cred.group, "channel-1"]);
+			expect(responseTxt[1].name).to.equal("channel-2");
+			expect(responseTxt[1].path).to.deep.equal([cred.group, "channel-2"]);
 			done();
 		})
 	});
@@ -158,13 +160,14 @@ describe("api/channel-get-list", function() {
 		.post("/api/channel-get-list")
 		.set("x-access-token", jsonWebToken)
 		.send({
-			path: [cred.group, "group-1"]
+			path: [cred.group, "channel-1"]
 		})
 		.end(function(error, response) {
 			expect(response).to.have.status(200);
 			const responseTxt = JSON.parse(response.text);
 			expect(responseTxt.length).to.equal(1);
-			expect(responseTxt[0].name).to.equal("group-1-1");
+			expect(responseTxt[0].name).to.equal("channel-1-1");
+			expect(responseTxt[0].path).to.deep.equal([cred.group, "channel-1", "channel-1-1"]);
 			done();
 		});
 	});

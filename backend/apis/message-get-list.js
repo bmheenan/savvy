@@ -31,6 +31,9 @@ function getMessagesPreAuth(request, response) {
 	gatekeeper.gate(request, response, getMessages);
 }
 
+/*
+Gets the list of messages in the path, assuming authentication at this point
+*/
 function getMessages(request, response, token) {
 	if (!hasFields.has(request, ["path"])) {
 		log.error("Missing path");
@@ -65,6 +68,9 @@ function getMessages(request, response, token) {
 	data.store().runQuery(query, (error, waypoints) => { getMessagesFromWaypoints(error, waypoints, response) });
 }
 
+/*
+Given the correct set of waypoints, returns messages
+*/
 function getMessagesFromWaypoints(error, waypoints, response) {
 	if (error) {
 		log.error("Could not get message waypoints from datastore");
@@ -87,6 +93,9 @@ function getMessagesFromWaypoints(error, waypoints, response) {
 	data.store().get(keys, (error, messages) => { returnMessages(error, messages, response); });
 }
 
+/*
+Given the set of messages, format and return them
+*/
 function returnMessages(error, messages, response) {
 	if (error) {
 		log.error("Could not get messages from datastore");
@@ -98,12 +107,18 @@ function returnMessages(error, messages, response) {
 	response.setHeader("Content-Type", "application/json");
 	
 	// Ensures we only return the fields we should, and provide key
-	const formattedResults = messages.map((message) => {
+	var formattedResults = messages.map((message) => {
 		return {
 			author: message.author,
 			key: message[data.store().KEY],
-			text: message.text
+			text: message.text,
+			timestamp: message.timestamp
 		};
+	});
+
+	// Sort by time
+	formattedResults.sort(function(a, b) {
+		return a.timestamp - b.timestamp;
 	});
 	
 	log.___("Returning messages");

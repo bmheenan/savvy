@@ -83,7 +83,7 @@ describe("api/channel-new", function() {
 		.post("/api/channel-new")
 		.set("x-access-token", jsonWebToken)
 		.send({
-			parent: ["not", "real"]
+			parent: [cred.group, "not", "real"]
 		})
 		.end(function(error, response) {
 			expect(response).to.have.status(400);
@@ -96,7 +96,7 @@ describe("api/channel-new", function() {
 		.post("/api/channel-new")
 		.set("x-access-token", jsonWebToken)
 		.send({
-			parent: ["not", "real", "parent", "nothing"],
+			parent: [cred.group, "not", "real", "parent", "nothing"],
 			name: "newchannel"
 		})
 		.end(function(error, response) {
@@ -141,7 +141,7 @@ describe("api/channel-new", function() {
 		.set("x-access-token", jsonWebToken)
 		.send({
 			name: "new-new-channel",
-			parent: ["newchannel"]
+			parent: [cred.group, "newchannel"]
 		})
 		.end(function(error, response) {
 			expect(response).to.have.status(200);

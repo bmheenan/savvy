@@ -20,6 +20,15 @@
 	.sidebarBottom a {
 		padding: 20px;
 	}
+
+	.sidebar .breadcrumbs {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.sidebar .breadcrumbs .breadcrumb {
+		padding: 15px;
+	}
 	
 	.sidebar .currentChannel {
 		padding: 15px 5px 15px 25px;
@@ -83,7 +92,7 @@
 <div class="sidebarTop">
 	<div class="breadcrumbs"></div>
 	<div class="currentChannel"></div>
-	<div class="subchannels"><span class="loading">Loading channels...</span></div>
+	<div class="subchannels"><span class="loading">...</span></div>
 	<div class="newChannel">
 		<div class="expandButton">
 			<span>+ new</span>

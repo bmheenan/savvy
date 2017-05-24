@@ -22,6 +22,7 @@ module.exports = {
 /*
 Clears out all messages, channels, and waypoints for the given group
 request			must contain groupToClear, which must match the json web token
+*				This function only works in test mode. In production, it returns code 403
 */
 function groupClearPreAuth(request, response) {
 	log.line("Clear group", 1);
@@ -48,6 +49,8 @@ function groupClear(request, response, token) {
 	}
 }
 
+// CHANNELS
+
 function deleteAllChannels(request, response) {
 	const query = data.store().createQuery("channel")
 	.hasAncestor(data.store().key(["group", request.body.groupToClear]))
@@ -61,6 +64,8 @@ function deleteChannels(error, channelsToDelete, request, response) {
 	});
 	data.store().delete(keys, (error) => { deleteAllMessages(error, request, response); });
 }
+
+// MESSAGES
 
 function deleteAllMessages(error, request, response) {
 	if (error) {
@@ -82,6 +87,8 @@ function deleteMessages(error, messagesToDelete, request, response) {
 	data.store().delete(keys, (error) => { deleteAllWaypoints(error, request, response); });
 }
 
+// WAYPOINTS
+
 function deleteAllWaypoints(error, request, response) {
 	if (error) {
 		log.error("Could not delete messages");
@@ -101,6 +108,8 @@ function deleteWaypoints(error, waypointsToDelete, request, response) {
 	});
 	data.store().delete(keys, (error) => { respond(error, response); });
 }
+
+// DONE
 
 function respond(error, response) {
 	if (error) {

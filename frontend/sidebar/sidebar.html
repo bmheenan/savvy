@@ -1,7 +1,7 @@
 <style type="text/css">
 	.sidebar a {
 		text-decoration: none;
-		color: #2536CC;
+		color: #256CD4;
 	}
 	.sidebar p {
 		margin: 20px;
@@ -9,7 +9,8 @@
 	.sidebar {
 		display: flex;
 		flex-direction: column;
-		background-color: #eeeeee;
+		background-color: #DAE6F7;
+		color: #333;
 	}
 	.sidebarBottom {
 		flex-grow: 1;
@@ -27,31 +28,35 @@
 	}
 
 	.sidebar .breadcrumbs .breadcrumb {
-		padding: 15px;
+		padding: 10px 15px;
+	}
+	.sidebar .breadcrumbs .breadcrumb:hover {
+		background-color: #e7eef8;
 	}
 	
 	.sidebar .currentChannel {
-		padding: 15px 5px 15px 25px;
-    	background-color: #333;
-    	color: #fff;
+		padding: 10px 5px 10px 25px;
+    	background-color: #fff;
+    	color: #000;
 	}
 	.sidebar .subchannels {
 		display: flex;
 		flex-direction: column;
-		padding-left: 15px;
 	}
 	.sidebar .subchannels .loading {
 		margin: 10px;
 		color: #555;
 	}
 	.sidebar .subchannel {
-		padding: 15px 5px 5px 25px;
+		padding: 10px 5px 10px 40px;
 		display: inline-block;
+	}
+	.sidebar .subchannel:hover {
+		background-color: #e7eef8;
 	}
 	
 	.sidebar .newChannel > div {
 		max-height: 60px;
-		padding: 10px;
 		overflow: hidden;
 		transition: max-height .25s, padding .25s;
 	}
@@ -61,11 +66,11 @@
 	}
 	.sidebar .newChannel .expandButton {
 		cursor: pointer;
-		color: #2536CC;
-		padding-left: 25px;
+		color: #256CD4;
+		padding: 10px 0 10px 40px;
 	}
 	.sidebar .newChannel .expandButton:hover {
-		background-color: #fff;
+		background-color: #e7eef8;
 	}
 	.sidebar .newChannel .input {
 		display: flex;
@@ -73,17 +78,25 @@
 	}
 	.sidebar .newChannel .input input {
 		flex-grow: 1;
+		padding: 7px 10px;
+		background-color: #DAE6F7;
+		border: 1px solid #256CD4;
+		color: #256CD4;
+		font-size: .95rem;
+		margin-right: 10px;
+		margin-top: 5px;
+		font-family: sans-serif;
 	}
-	.sidebar .newChannel .input a {
-		padding: 5px;
+	.sidebar .newChannel .input .newChannelsubmit {
+		padding: 5px 10px;
+		display: none;
 	}
-	.sidebar .newChannel .input input {
-		padding: 5px;
-	}
-	.sidebar .newChannel .ncTitle {
-		padding: 5px;
-		font-size: 10pt;
-		color: #444;
+	.sidebar .newChannel .collapseButton {
+		padding: 5px 5px 5px 10px;
+		width: 15px;
+		text-align: center;
+		transform: rotate(45deg);
+		font-size: 1.2rem;
 	}
 </style>
 
@@ -95,14 +108,13 @@
 	<div class="subchannels"><span class="loading">...</span></div>
 	<div class="newChannel">
 		<div class="expandButton">
-			<span>+ new</span>
+			<span>+</span>
 		</div>
 		<div class="expanded hidden">
-			<span class="ncTitle">Create new channel:</span>
 			<div class="input">
-				<input></input>
+				<a href="#" class="collapseButton">+</a>
+				<input placeholder="new sub channel"></input>
 				<a href="#" class="newChannelSubmit">create</a>
-				<a href="#" class="collapseButton">x</a>
 			</div>
 		</div>
 	</div>

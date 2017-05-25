@@ -41,11 +41,29 @@ function messages() {
 			return;
 		}
 		var messages = JSON.parse(response);
+		if (messages.length === 0) {
+			$(".messages .allMessages").innerHTML = "No messages";
+		} else {
+			ajax({
+				type: "GET",
+				url: "messages/message/message.html",
+				callback: (error, response) => { gotMessage(error, response, messages); }
+			})
+		}
+	}
+
+	function gotMessage(error, response, messages) {
+		console.log(response);
 		var messagesDiv = $(".messages .allMessages");
 		messagesDiv.innerHTML = "";
 		for (var i = 0; i < messages.length; i++) {
 			var message = document.createElement("div");
-			message.innerHTML = `${messages[i].author}: ${messages[i].text}`;
+			message.innerHTML = response;
+			var date = new Date(messages[i].timestamp);
+			message.innerHTML = message.innerHTML
+				.replace("$$author", messages[i].author)
+				.replace("$$timestamp", date.getMonth() + "-" + date.getDate())
+				.replace("$$text", messages[i].text);
 			messagesDiv.appendChild(message);
 		}
 	}

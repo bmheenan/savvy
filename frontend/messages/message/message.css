@@ -1,0 +1,18 @@
+.message {
+    margin-bottom: 10px;
+    border: #ddd 1px solid;
+}
+
+.message .head {
+    background-color: #eee;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.message .head .author {
+    color: #256CD4;
+}
+
+.message .body {
+    padding: 10px;
+}

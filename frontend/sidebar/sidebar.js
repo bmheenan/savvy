@@ -6,7 +6,7 @@ function sidebar() {
 	$("#logoutButton").addEventListener("click", logout);
 	$(".sidebar .newChannel .expandButton").addEventListener("click", showNewChannel);
 	$(".sidebar .newChannel .collapseButton").addEventListener("click", hideNewChannel);
-	$(".sidebar .newChannel .newChannelSubmit").addEventListener("click", newChannel);
+	$(".sidebar .newChannel .input input").addEventListener("keypress", newChannel);
 
 	goToChannelPath([globals.group]);
 
@@ -72,6 +72,9 @@ function sidebar() {
 	}
 
 	function newChannel(e) {
+		if (e.keyCode !== 13) {
+			return;
+		}
 		var channelName = $(".sidebar .newChannel .input input").value;
 		if (channelName.length > 0) {
 			ajax({

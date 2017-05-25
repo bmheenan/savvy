@@ -6,15 +6,15 @@
 	}
 	.newMessageContainer {
 		position: fixed;
-		left: 310px;
+		left: 292px;
 		bottom: 10px;
-		background: #eeeeee;
 		overflow: hidden;
 		display: flex;
+		flex-direction: column;
 	}
 	.messages .hidden {
 		max-height: 0px !important;
-		max-width: 0px !important;
+		/*max-width: 0px !important;*/
 		opacity: 0 !important;
 	}
 	.obscured {
@@ -23,7 +23,7 @@
 	.expandNewButton {
 		padding: 10px 15px;
 		color: #ffffff;
-		background-color: #2536CC;
+		background-color: #DC3567;
 		display: inline-block;
 		cursor: pointer;
 		white-space: nowrap;
@@ -40,6 +40,7 @@
 		display: flex;
 		flex-direction: column;
 		border: 1px #ccc solid;
+		background-color: #eee;
 	}
 	.newMessageContainer .expanded textarea {
 		flex-grow: 1;
@@ -57,18 +58,16 @@
 	}
 	.newMessageContainer .submitButton {
 		color: #ffffff;
-		background-color: #2536CC;
+		background-color: #DC3567;
 	}
 </style>
 
 <!-- .messages -->
 
-<div class="allMessages">Pick a channel</div>
+<div class="allMessages">Loading messages...</div>
 
 <div class="newMessageContainer">
-	<div class="collapsed">
-		<span class="expandNewButton">+ New thread</span>
-	</div>
+	
 	<div class="expanded hidden">
 		<textarea class="newMessageTextInput"></textarea>
 		<div class="controls">
@@ -76,5 +75,7 @@
 			<span class="hideButton">Cancel</span>
 		</div>
 	</div>
-	
+	<div class="collapsed">
+		<span class="expandNewButton">+ New thread</span>
+	</div>
 </div>
